@@ -102,13 +102,30 @@ fn quick_sort(arr :&mut [i32]){
 }
 
 
+fn shell_sort(arr: &mut Vec<i32>) {
+    let mut gap: usize = arr.len() / 2;
+    let len: usize = arr.len();
+
+    while gap > 0 {
+        for i in gap..len {
+            let mut j = i;
+            while j >= gap && arr[j] < arr[j - gap] {
+                arr.swap(j, j - gap);
+                j -= gap;
+            }
+        }
+        gap /= 2;
+    }
+}
+
+
 
 fn main() {
-    let mut arr:Vec<i32>=[5,1,2,0,8,8,6,9,4].to_vec();
+    let mut arr:Vec<i32>=[5,7,2,9,8,1,6,0,4].to_vec();
     
     println!("{:?}",arr);
 
-    arr=merge_sort(&mut arr);
+    shell_sort(&mut arr);
 
     println!("{:?}",arr);
 }
