@@ -118,14 +118,79 @@ fn shell_sort(arr: &mut Vec<i32>) {
     }
 }
 
+fn heapfy(arr: &mut Vec<i32>, len: usize, i: usize) {
+    let mut max = i;
+    let l = 2 * i + 1;
+    let r = 2 * i + 2;
+
+    if l < len && arr[l] > arr[max] {
+        max = l;
+    }
+
+    if r < len && arr[r] > arr[max] {
+        max = r;
+    }
+
+    if max != i {
+        arr.swap(i, max);
+        heapfy(arr, len, max);
+    }
+}
+
+fn heap_sort(arr: &mut Vec<i32>) {
+    let len = arr.len();
+
+    // Build max heap
+    for i in (0..len / 2).rev() {
+        heapfy(arr, len, i);
+    }
+
+    // Extract elements one by one
+    for i in (1..len).rev() {
+        arr.swap(0, i);
+        heapfy(arr, i, 0);
+    }
+}
+
+fn counting_sort(arr: &mut Vec<i32>) -> Vec<i32> {
+    if arr.is_empty() {
+        return vec![];
+    }
+
+    let mut max = arr[0];
+    for val in arr.iter() {
+        if *val > max {
+            max = *val;
+        }
+    }
+
+    let mut count = vec![0; (max + 1) as usize];
+
+    for val in arr.iter() {
+        count[*val as usize] += 1;
+    }
+
+    let mut result = Vec::with_capacity(arr.len());
+
+    for i in 0..count.len() {
+        for _ in 0..count[i] {
+            result.push(i as i32);
+        }
+    }
+
+    result
+}
 
 
 fn main() {
-    let mut arr:Vec<i32>=[5,7,2,9,8,1,6,0,4].to_vec();
+    let mut arr:Vec<i32>=[5,7,10,2,9,8,1,6,0,4].to_vec();
     
     println!("{:?}",arr);
 
-    shell_sort(&mut arr);
+    heap_sort(&mut arr);
+
+    
+ 
 
     println!("{:?}",arr);
 }
